@@ -16,7 +16,6 @@ return new class extends Migration
             $table->unsignedBigInteger('competition_id');
             $table->unsignedBigInteger('game_station_id');
             $table->enum('status', ['waiting', 'started', 'cancelled', 'finished']);
-            $table->unsignedBigInteger('winner_id')->nullable();
             $table->timestamps();
 
             $table->foreign('competition_id')->references('id')->on('competitions');
