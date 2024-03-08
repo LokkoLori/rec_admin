@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\EntryController;
 use App\Http\Controllers\RegistrationController;
+use App\Http\Controllers\MatchMakingController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -42,6 +43,10 @@ Route::group(['middleware' => ['role:admin']], function () {
     Route::get('/registration', [RegistrationController::class, 'index'])->name('registration.index');
     Route::post('/registration/entry_store', [RegistrationController::class, 'storeEntry'])->name('registration.entry_store');
     Route::post('/registration/entry_update', [RegistrationController::class, 'updateEntry'])->name('registration.entry_update');
+    Route::get('/matchmaking', [MatchMakingController::class, 'index'])->name('matchmaking.index');
+    Route::post('/matchmaking/create_match', [MatchMakingController::class, 'create_match'])->name('matchmaking.create_match');
+    Route::post('/matchmaking/start_match', [MatchMakingController::class, 'start_match'])->name('matchmaking.start_match');
+    Route::post('/matchmaking/finish_match', [MatchMakingController::class, 'finish_match'])->name('matchmaking.finish_match');
 });
 
 require __DIR__.'/auth.php';

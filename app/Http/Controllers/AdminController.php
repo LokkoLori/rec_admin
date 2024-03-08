@@ -12,7 +12,7 @@ class AdminController extends Controller
     // List roles
     public function rolesIndex()
     {
-        $roles = Role::all(); // Retrieve all roles from the database
+        $roles = Role::all();
         return view('admin.roles', compact('roles'));
     }
 
@@ -26,13 +26,13 @@ class AdminController extends Controller
     public function users()
     {
         $users = User::all();
-        $roles = Role::all(); // Szerepkörök lekérése
+        $roles = Role::all();
         return view('admin.users', compact('users', 'roles'));
     }
 
     public function assignRole(Request $request, User $user)
     {
-        $user->syncRoles($request->roles); // Szerepkörök hozzárendelése a felhasználóhoz
+        $user->syncRoles($request->roles);
         return redirect()->back()->with('success', 'Szerepkörök frissítve.');
     }
 }
