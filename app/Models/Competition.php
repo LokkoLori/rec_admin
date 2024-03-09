@@ -62,7 +62,7 @@ class Competition extends Model
                 $exluded_opponents[] = $p->opponent();
             }
 
-            $row["availbe_opponents"] = array_diff($available_opponents, $exluded_opponents);
+            $row["available_opponents"] = array_diff($available_opponents, $exluded_opponents);
             $row["random"] = random_int(0, 10000);
         
             $ret[] = $row;
@@ -73,8 +73,8 @@ class Competition extends Model
                 return $a["match_count"] < $b["match_count"] ? -1 : 1;
             }
         
-            if (count($a["availbe_opponents"]) != count($a["availbe_opponents"]) ) {
-                return count($a["availbe_opponents"]) < count($a["availbe_opponents"]) ? -1 : 1;
+            if (count($a["available_opponents"]) != count($a["available_opponents"]) ) {
+                return count($a["available_opponents"]) < count($a["available_opponents"]) ? -1 : 1;
             }
         
             return $a["random"] < $b['random'] ? -1 : 1;

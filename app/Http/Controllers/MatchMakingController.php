@@ -45,7 +45,7 @@ class MatchMakingController extends Controller
 
         // find the first available gamer pair in the priority list
         while($p1i < count($free_gamers_table)-1){
-            $available_opponents = $free_gamers_table[0]["availbe_opponents"]; 
+            $available_opponents = $free_gamers_table[$p1i]["available_opponents"]; 
             $p2i = $p2i + 1;
             if (count($available_opponents) == 0){
                 // if all oppnent is finished the game, then choose the next free gamer, even if he has more than max matches
