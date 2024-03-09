@@ -38,7 +38,7 @@
                 <select name="sub_gamer_1_id" id="sub_gamer_1_id" class="form-control">
                     <option value="0">-</option>
                     @foreach ($free_gamers_tables[$act_compo->id] as $free_gamer)
-                        <option value="{{$free_gamer['gamer']->id}}">{{mm_gamer_name($free_gamer['gamer'], $act_compo)}}</option>
+                        <option value="{{$free_gamer['gamer']->id}}">{{$free_gamer['gamer']->nickname}}({{$free_gamer['match_count']}})</option>
                     @endforeach
                 </select>
             vs 
@@ -46,11 +46,11 @@
                 <select name="sub_gamer_2_id" id="sub_gamer_2_id" class="form-control">
                     <option value="0">-</option>
                     @foreach ($free_gamers_tables[$act_compo->id] as $free_gamer)
-                        <option value="{{$free_gamer['gamer']->id}}">{{mm_gamer_name($free_gamer['gamer'], $act_compo)}}</option>
+                        <option value="{{$free_gamer['gamer']->id}}">{{$free_gamer['gamer']->nickname}}({{$free_gamer['match_count']}})</option>
                     @endforeach
                 </select>
 
-                <input type="hidden" name="game_match_id" value="{{ $game_station->actual_match()->id }}"/> 
+                <input type="hidden" name="game_match_id" value="{{ $act_match->id }}"/> 
                 <button type="submit" name="match_action" value="start" class="btn btn-success">Start</button>
                 <button type="submit" name="match_action" value="update" class="btn btn-success">Update</button>
                 <button type="submit" name="match_action" value="cancel" class="btn btn-success">Cancel</button>
@@ -58,14 +58,13 @@
         </form>
         @endif
         @if ($act_match->status == 'started')
-            {{ $game_station->actual_match()->competition->game->name }}
-            {{ $game_station->actual_match()->competition->game->name }} : 
-            {{ $game_station->actual_match()->participations->get(0)->gamer->nickname }}({{ $game_station->actual_match()->participations->get(0)->gamer->finished_participations($game_station->actual_match()->competition)->count()}}) 
-            vs 
-            {{ $game_station->actual_match()->participations->get(1)->gamer->nickname }}({{ $game_station->actual_match()->participations->get(1)->gamer->finished_participations($game_station->actual_match()->competition)->count()}})
             <form action="{{ route('matchmaking.finish_match') }}" method="POST">
-                <input type="hidden" name="game_match_id" value="{{ $game_station->actual_match()->id }}"/>
+                {{ $act_compo->game->name }} :
+                <input type="hidden" name="game_match_id" value="{{ $act_match->id }}"/>
+                {{ mm_gamer_name($gamer_1, $act_compo) }}
                 <input type="number" id="point_1" name="point_1" min="0" max="100">
+                vs
+                {{ mm_gamer_name($gamer_2, $act_compo) }}
                 <input type="number" id="point_2" name="point_2" min="0" max="100">
                 <button type="submit" name="match_action" value="finish" class="btn btn-success">Finish</button>
                 <button type="submit" name="match_action" value="delete" class="btn btn-success">Delete</button>
