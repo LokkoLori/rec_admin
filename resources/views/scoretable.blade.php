@@ -1,8 +1,8 @@
-<!--script>
+<script>
     setTimeout(function() {
         window.location.reload(true); 
     }, 10000);
-</script-->
+</script>
 
 <h1> REC {{ $actual_day->season->year}} - {{ $actual_day->name }} </h1>
 <h2> ponttáblázat </h2>
@@ -18,7 +18,7 @@
             <th>rank</th>
             <th>név (meccsek száma)</th>
             <th>primary</th>
-            <th>seconary</th>
+            <th>secondary</th>
         </tr>
     <tbody>
     @php

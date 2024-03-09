@@ -6,6 +6,7 @@ use App\Http\Controllers\EntryController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\MatchMakingController;
 use App\Http\Controllers\ScoreTableController;
+use App\Http\Controllers\GamerInfoController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -51,5 +52,6 @@ Route::group(['middleware' => ['role:admin']], function () {
 });
 
 Route::get('/scoretable', [ScoreTableController::class, 'index'])->name('scoretable.index');
+Route::get('/gamerinfo', [GamerInfoController::class, 'index'])->name('gamerinfo.index');
 
 require __DIR__.'/auth.php';

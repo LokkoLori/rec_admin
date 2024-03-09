@@ -15,4 +15,8 @@ class Game extends Model
         // in theory only one active competition for a game should be
         return Competition::where("competition_day_id", CompetitionDay::actual_day()->id)->where("game_id", $this->id)->first();
     }
+
+    public function game_stations(){
+        return $this->hasMany(GameStation::class);
+    }
 }
