@@ -5,6 +5,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\EntryController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\MatchMakingController;
+use App\Http\Controllers\ScoreTableController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -48,5 +49,7 @@ Route::group(['middleware' => ['role:admin']], function () {
     Route::post('/matchmaking/start_match', [MatchMakingController::class, 'start_match'])->name('matchmaking.start_match');
     Route::post('/matchmaking/finish_match', [MatchMakingController::class, 'finish_match'])->name('matchmaking.finish_match');
 });
+
+Route::get('/scoretable', [ScoreTableController::class, 'index'])->name('scoretable.index');
 
 require __DIR__.'/auth.php';
