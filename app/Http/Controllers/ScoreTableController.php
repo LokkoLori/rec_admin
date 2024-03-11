@@ -8,9 +8,13 @@ use App\Models\CompetitionDay;
 
 class ScoreTableController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $actual_day = CompetitionDay::actual_day();
+        if (is_null($request->input("competion_day_id"))){
+            $actual_day = CompetitionDay::actual_day();
+        } else {
+            $actual_day = CompetitionDay::find($request->input("competion_day_id"));
+        }
         $compo_score_tables = []; 
         $compos = $actual_day->competitions;
         
@@ -19,7 +23,7 @@ class ScoreTableController extends Controller
             $compo_data = [];
             $compo_data["compo"] = $compo;
             $compo_data["gamer_data"] = [];
-            $entries = $compo->entries->whereIn('status', ['accepted', 'finished']);
+            $entries = $compo->entries->whereIn('status', ['accepted', 'disqualified', 'revoked', 'finished']);
             
             $gamer_points = [];
 
@@ -43,6 +47,11 @@ class ScoreTableController extends Controller
                 $gamer_data["primary_score"] = $sum_score;
                 $gamer_points[$gamer->nickname] = $sum_score;
 
+                $gamer_data["qualified"] = 1;
+                if (in_array($entry->status, ["disqualified", "revoked"])){
+                    $gamer_data["qualified"] = 0;
+                }
+
                 $compo_data["gamer_data"][] = $gamer_data;
             }
 
@@ -64,6 +73,11 @@ class ScoreTableController extends Controller
             // sorting score tables by logic!
 
             usort($table["gamer_data"], function ($a, $b) {
+
+                if ($a["qualified"] != $b["qualified"]){
+                    return $a["qualified"] < $b["qualified"] ? 1 : -1;
+                }
+
                 if ($a["primary_score"] != $b["primary_score"]){
                     return $a["primary_score"] < $b["primary_score"] ? 1 : -1;
                 }

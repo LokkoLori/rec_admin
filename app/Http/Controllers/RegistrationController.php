@@ -62,6 +62,7 @@ class RegistrationController extends Controller
     {
         $entry = Entry::find($request->input("entry_id"));
         $entry->status = $request->input("entry_status");
+        $entry->points = $request->input("entry_points");
         $entry->save();
 
         return redirect()->route('registration.index');

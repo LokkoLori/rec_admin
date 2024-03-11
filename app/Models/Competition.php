@@ -23,7 +23,7 @@ class Competition extends Model
 
     public function entries()
     {
-        return $this->hasMany(Entry::class)->where('status', 'accepted');
+        return $this->hasMany(Entry::class);
     }
 
     public function game_matches()
@@ -39,7 +39,10 @@ class Competition extends Model
 
         $free_gamers = [];  // free gamers in this compo
         $available_opponents = [];
-        foreach ($this->entries as $entry){
+
+        $entries = $this->entries->where('status', 'accepted');
+
+        foreach ($entries as $entry){
             $gamer =  $entry->gamer;
             if ($gamer->finished_participations($this)->count() < $this->round_count){
                 $available_opponents[] = $gamer;

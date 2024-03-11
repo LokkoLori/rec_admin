@@ -41,6 +41,7 @@
                                 <option value="{{ $entry_status_option }}" {{ ($entry->status == $entry_status_option) ? 'selected' : '' }}>{{ $entry_status_option }}</option>
                             @endforeach
                             </select>
+                            <input type="number" id="entry_points" name="entry_points" min="0" max="10" value="{{$entry->points}}">
                             @csrf
                             <button type="submit" class="btn btn-success">Update</button>
                         </form>

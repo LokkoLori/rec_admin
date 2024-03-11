@@ -46,7 +46,7 @@ class MatchMakingController extends Controller
         // find the first available gamer pair in the priority list
         while($p1i < count($free_gamers_table)-1){
             $available_opponents = $free_gamers_table[$p1i]["available_opponents"]; 
-            $p2i = $p2i + 1;
+            $p2i = $p1i + 1;
             if (count($available_opponents) == 0){
                 // if all oppnent is finished the game, then choose the next free gamer, even if he has more than max matches
                 break;
@@ -77,12 +77,12 @@ class MatchMakingController extends Controller
 
         $participant_1st = new GameMatchParticipation;
         $participant_1st->game_match_id = $game_match->id;
-        $participant_1st->gamer_id = $free_gamers_table[0]["gamer"]->id;
+        $participant_1st->gamer_id = $free_gamers_table[$p1i]["gamer"]->id;
         $participant_1st->save();
 
         $participant_1st = new GameMatchParticipation;
         $participant_1st->game_match_id = $game_match->id;
-        $participant_1st->gamer_id = $free_gamers_table[1]["gamer"]->id;
+        $participant_1st->gamer_id = $free_gamers_table[$p2i]["gamer"]->id;
         $participant_1st->save();
 
         return redirect()->route('matchmaking.index');
@@ -125,10 +125,16 @@ class MatchMakingController extends Controller
 
             $p1 = $game_match->participations->get(0);
             $p1->score = $request->input("point_1");
+            if (is_null($p1->score)){
+                $p1->score = 0;
+            }
             $p1->save();
     
             $p2 = $game_match->participations->get(1);
             $p2->score = $request->input("point_2");
+            if (is_null($p2->score)){
+                $p2->score = 0;
+            }
             $p2->save();
 
         } elseif ($request->input("match_action") == "delete") {

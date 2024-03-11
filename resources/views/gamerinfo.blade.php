@@ -17,8 +17,8 @@ $compos = $actual_day->competitions;
 @endphp
 
 @foreach($compos as $compo)
-    <div>
-    <h3>{{ $compo->game->name }}</h3>
+    <div style="border-right: 1px solid black; padding: 5px;">
+    <p>{{ $compo->game->name }}</p>
     <table style="margin-right: 20px;">
     @foreach($compo->game->game_stations as $gs)
     <tr>

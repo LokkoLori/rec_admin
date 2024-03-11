@@ -4,21 +4,20 @@
     }, 10000);
 </script>
 
-<h1> REC {{ $actual_day->season->year}} - {{ $actual_day->name }} </h1>
-<h2> ponttáblázat </h2>
+<h2 style="margin-bottom: 0px"> <img src="{{ asset('images/reclogo.png') }}" width="150"/> {{ $actual_day->season->year}} - {{ $actual_day->name }} </h2>
 
 <div style="display: flex;">
 @foreach ($compo_score_tables as $table)
-<div>
-<h3>{{ $table["compo"]->game->name }}</h3>
+<div style="border-right: 1px solid black; padding: 5px;">
+<p>{{ $table["compo"]->game->name }}</p>
 <table style="margin-right: 20px;">
     <thead>
     </thead>
         <tr>
-            <th>rank</th>
-            <th>név (meccsek száma)</th>
-            <th>primary</th>
-            <th>secondary</th>
+            <th></th>
+            <th></th>
+            <th>main</th>
+            <th>sub</th>
         </tr>
     <tbody>
     @php
@@ -26,7 +25,7 @@
     @endphp
     @foreach ($table["gamer_data"] as $gamer_data)
     <tr>
-        <td>{{ $rank }}.</td>
+        <td>{{ ($gamer_data["qualified"] != 0) ? $rank.'.' : 'out' }}</td>
         <td>{{ $gamer_data["gamer"]->nickname }}({{ count($gamer_data["matches"]) }})</td>
         <td>{{ $gamer_data["primary_score"]}}</td>
         <td>{{ $gamer_data["secondary_score"]}}</td>
