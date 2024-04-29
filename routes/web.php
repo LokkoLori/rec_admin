@@ -8,6 +8,7 @@ use App\Http\Controllers\MatchMakingController;
 use App\Http\Controllers\ScoreTableController;
 use App\Http\Controllers\GamerInfoController;
 use App\Http\Controllers\MatchesController;
+use App\Http\Controllers\MatchClientController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -52,6 +53,7 @@ Route::group(['middleware' => ['role:admin']], function () {
     Route::post('/matchmaking/finish_match', [MatchMakingController::class, 'finish_match'])->name('matchmaking.finish_match');
     Route::get('/matches', [MatchesController::class, 'index'])->name('matches.index');
     Route::post('/matches/update', [MatchesController::class, 'update'])->name('matches.update');
+    Route::get('/matchclient', [MatchClientController::class, 'index'])->name('matchclient.index');
 });
 
 Route::get('/scoretable', [ScoreTableController::class, 'index'])->name('scoretable.index');
