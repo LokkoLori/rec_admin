@@ -1,13 +1,32 @@
+@php
+    $act_compo = $act_match->competition;
+    $gamer_1 = $act_match->participations->get(0)->gamer;
+    $gamer_2 = $act_match->participations->get(1)->gamer;
+@endphp
+
+<style>
+.pairbutton {
+    width: 300px;
+    height:150px;
+    font-size: 24pt;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+</style>
+
 <script>
 
 var target = null;
 
 </script>
+
 <table style="width: 100%">
     <tr>
-        <td><button id="p1button" style="width: 200px; height:100px">P1</button></td>
-        <td style="width: 100%; text-align: center">hello</td>
-        <td><button id="p2button" style="width: 200px; height:100px">P2</button></td>
+        <td><button id="p1button" class="pairbutton">{{ $gamer_1->nickname }}</button></td>
+        <td style="width: 100%; text-align: center; font-size: 18pt">{{ $act_match->game_station->name }}<br/><font style="color: red">{{ $act_match->status }}</font></td>
+        <td><button id="p2button" class="pairbutton">{{ $gamer_2->nickname }}</button></td>
     </tr>
 </table>
 
