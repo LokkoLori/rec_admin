@@ -76,8 +76,8 @@ class Competition extends Model
                 return $a["match_count"] < $b["match_count"] ? -1 : 1;
             }
         
-            if (count($a["available_opponents"]) != count($a["available_opponents"]) ) {
-                return count($a["available_opponents"]) < count($a["available_opponents"]) ? -1 : 1;
+            if (count($a["available_opponents"]) != count($b["available_opponents"]) ) {
+                return count($a["available_opponents"]) < count($b["available_opponents"]) ? -1 : 1;
             }
         
             return $a["random"] < $b['random'] ? -1 : 1;

@@ -46,21 +46,27 @@ class GameMatch extends Model
             }
 
 
-            if ($competition->round_count <= $free_gamers_table[0]["gamer"]->finished_participations($competition)->count()){
-                return null;
-            }
-
             $p1i = 0;
             $p2i = 0;
 
+            $rc = $competition->round_count;
+
             // find the first available gamer pair in the priority list
             while($p1i < count($free_gamers_table)-1){
+
+
+                if ($rc <= $free_gamers_table[$p1i]["match_count"]){
+                    # if we're running out from gamers who hasn't ended compo
+                    return null;
+                }
+
                 $available_opponents = $free_gamers_table[$p1i]["available_opponents"]; 
                 $p2i = $p1i + 1;
                 if (count($available_opponents) == 0){
                     // if all oppnent is finished the game, then choose the next free gamer, even if he has more than max matches
                     break;
                 }
+
                 while($p2i < count($free_gamers_table)){
                     if (in_array($free_gamers_table[$p2i]["gamer"], $available_opponents)){
                         break;

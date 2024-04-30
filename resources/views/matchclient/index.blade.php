@@ -34,7 +34,7 @@ var target = null;
         $gamer_1 = $act_match->participations->get(0)->gamer;
         $gamer_2 = $act_match->participations->get(1)->gamer;
     @endphp
-    <td><button id="p1button" class="pairbutton">{{ $gamer_1->nickname }}</button></td>
+    <td><button id="p1button" class="pairbutton" type="button">{{ $gamer_1->nickname }}</button></td>
     <td style="width: 100%; text-align: center; font-size: 18pt">
     @if ($act_match->status == "waiting")
         {{ $act_match->game_station->name }}<br/><font style="color: red">{{ $act_match->status }}</font>
@@ -48,7 +48,7 @@ var target = null;
     </div>
     @endif
     </td>
-    <td><button id="p2button" class="pairbutton">{{ $gamer_2->nickname }}</button></td>
+    <td><button id="p2button" class="pairbutton"  type="button">{{ $gamer_2->nickname }}</button></td>
 @endif
 </tr></table>
 </form>
