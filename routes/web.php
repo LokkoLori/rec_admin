@@ -54,6 +54,7 @@ Route::group(['middleware' => ['role:admin']], function () {
     Route::get('/matches', [MatchesController::class, 'index'])->name('matches.index');
     Route::post('/matches/update', [MatchesController::class, 'update'])->name('matches.update');
     Route::get('/matchclient', [MatchClientController::class, 'index'])->name('matchclient.index');
+    Route::post('/matchclient/action', [MatchClientController::class, 'action'])->name('matchclient.action');
 });
 
 Route::get('/scoretable', [ScoreTableController::class, 'index'])->name('scoretable.index');

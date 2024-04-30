@@ -71,21 +71,8 @@ class MatchMakingController extends Controller
         $game_match = GameMatch::find($request->input("game_match_id"));
 
         if ($request->input("match_action") == "finish"){
-            $game_match->status = "finished";
 
-            $p1 = $game_match->participations->get(0);
-            $p1->score = $request->input("point_1");
-            if (is_null($p1->score)){
-                $p1->score = 0;
-            }
-            $p1->save();
-    
-            $p2 = $game_match->participations->get(1);
-            $p2->score = $request->input("point_2");
-            if (is_null($p2->score)){
-                $p2->score = 0;
-            }
-            $p2->save();
+            $game_match->finish_with_result($request->input("point_1"), $request->input("point_2"));
 
         } elseif ($request->input("match_action") == "delete") {
             $game_match->status = "cancelled";
