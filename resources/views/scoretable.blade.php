@@ -1,9 +1,3 @@
-<script>
-    setTimeout(function() {
-        window.location.reload(true); 
-    }, 10000);
-</script>
-
 <h2 style="margin-bottom: 0px"> <img src="{{ asset('images/reclogo.png') }}" width="150"/> {{ $actual_day->season->year}} - {{ $actual_day->name }} </h2>
 
 <div style="display: flex;">
