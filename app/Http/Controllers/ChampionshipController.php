@@ -26,7 +26,7 @@ class ChampionshipController extends Controller
             ->join('competition_days', 'competitions.competition_day_id', '=', 'competition_days.id')
             ->join('games', 'competitions.game_id', '=', 'games.id')
             ->where('competition_days.season_id', $actual_season->id)
-            ->where('competition_days.status', 'finished')
+            ->where('competition_days.status', '!=', 'cancelled')
             ->select(
                 'gamers.nickname as gamer_name',
                 DB::raw('SUM(entries.points) as total_points')
@@ -43,6 +43,7 @@ class ChampionshipController extends Controller
             ->join('competitions', 'games.id', '=', 'competitions.game_id')
             ->join('competition_days', 'competitions.competition_day_id', '=', 'competition_days.id')
             ->where('competition_days.season_id', $actual_season->id)
+            ->where('competition_days.status', '!=', 'cancelled')
             ->select('games.id', 'games.name')
             ->distinct()
             ->get();
@@ -59,7 +60,7 @@ class ChampionshipController extends Controller
                 ->join('competition_days', 'competitions.competition_day_id', '=', 'competition_days.id')
                 ->join('games', 'competitions.game_id', '=', 'games.id')
                 ->where('competition_days.season_id', $actual_season->id)
-                ->where('competition_days.status', 'finished')
+                ->where('competition_days.status', '!=', 'cancelled')
                 ->where('games.id', $game->id)
                 ->select(
                     'gamers.nickname as gamer_name',

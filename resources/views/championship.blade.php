@@ -1,5 +1,5 @@
 
-<h2 style="margin-bottom: 0px"> <img src="{{ asset('images/reclogo.png') }}" width="150"/> {{ $actual_season->year }} results </h2>
+<h2 style="margin-bottom: 0px"> <img src="{{ asset('images/reclogo.png') }}" width="150"/> {{ $actual_season->year }} Championship scores </h2>
 
 <div style="display: flex;">
 @foreach ($compos as $compo)

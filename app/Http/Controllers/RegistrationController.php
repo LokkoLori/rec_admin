@@ -8,18 +8,23 @@ use Illuminate\Http\Request;
 use App\Models\Competition;
 use App\Models\Entry;
 use App\Models\Gamer;
+use App\Models\CompetitionDay;
 
 class RegistrationController extends Controller
 {
     public function index(Request $request)
     {
-        
-        $competitions = Competition::whereHas('competitionDay', function ($query) {
-            $query->where('status', 'started');
-        })->get();
 
-        $entries = Entry::whereHas('competition.competitionDay', function ($query) {
-            $query->where('status', 'started');
+        if (is_null($request->input("competion_day_id"))){
+            $actual_day = CompetitionDay::actual_day();
+        } else {
+            $actual_day = CompetitionDay::find($request->input("competion_day_id"));
+        }
+
+        $competitions = $actual_day->competitions()->get();
+
+        $entries = Entry::whereHas('competition.competitionDay', function ($query) use ($actual_day) {
+            $query->where('id', $actual_day->id);
         })->orderBy('created_at', 'desc')->get();
 
         $gamers = Gamer::orderBy('nickname')->get();
