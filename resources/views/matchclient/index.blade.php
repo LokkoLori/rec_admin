@@ -25,8 +25,9 @@ var target = null;
 @csrf
 <table style="width: 100%"><tr>
 @if (is_null($act_match))
+
     <td style="width: 100%; text-align: center; font-size: 18pt">
-    {{ $game_station->name }}<br/><font style="color: red">idle</font>
+    {{ $game_station->name }}<br/><font style="color: red">{{ $game_station->available == 0 ? "out of order" : "idle" }}</font>
     </td>
 @else
     @php
@@ -61,7 +62,7 @@ function action(){
     clinetform.submit();
 }
 
-@if (is_null($act_match))
+@if (is_null($act_match) && $game_station->available == 1)
 
 setTimeout(action, 10000);
 

@@ -25,7 +25,7 @@ $compos = $actual_day->competitions;
             @endphp
 
             @if (is_null($act_match))
-                idle ---
+                {{ $gs->available == 0 ? "out of order" : "idle" }} ---
             @else
                 {{$act_match->status}} : 
                 |

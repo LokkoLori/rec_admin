@@ -26,8 +26,13 @@ class GameMatch extends Model
 
     public static function draw_match(GameStation $game_station){
 
+        if ($game_station->available != 1) {
+            return null;
+        }
+
         $lockFilePath = sys_get_temp_dir() . DIRECTORY_SEPARATOR . "match_draw.lock";
         $lockFile = fopen($lockFilePath, "w+");
+
 
         if (!flock($lockFile, LOCK_EX)) {
             return null;
@@ -45,11 +50,9 @@ class GameMatch extends Model
                 return null;
             }
 
-
+            $rc = $competition->round_count;
             $p1i = 0;
             $p2i = 0;
-
-            $rc = $competition->round_count;
 
             // find the first available gamer pair in the priority list
             while($p1i < count($free_gamers_table)-1){
