@@ -44,7 +44,7 @@ class Competition extends Model
 
         foreach ($entries as $entry){
             $gamer =  $entry->gamer;
-            if ($gamer->finished_participations($this)->count() < $this->round_count){
+            if ($gamer->finished_qlf_matches($this)->count() < $this->round_count){
                 $available_opponents[] = $gamer;
             }
             if (!$gamer->is_busy()){
@@ -56,7 +56,7 @@ class Competition extends Model
             $row = [];
 
             $row["gamer"] = $gamer;
-            $participations = $gamer->finished_participations($this);
+            $participations = $gamer->finished_qlf_matches($this);
             $row["match_count"] = $participations->count();
 
             $exluded_opponents = [$gamer]; // it's a life hack!

@@ -33,7 +33,7 @@ class ScoreTableController extends Controller
                 $gamer = $entry->gamer;
                 $gamer_data["gamer"] = $gamer;
 
-                $participations = $gamer->finished_participations($compo);
+                $participations = $gamer->finished_qlf_matches($compo);
                 $gamer_data["matches"] = [];
                 $sum_score = 0;
                 foreach($participations as $participation){

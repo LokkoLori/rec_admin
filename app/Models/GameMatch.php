@@ -9,6 +9,12 @@ class GameMatch extends Model
 {
     use HasFactory;
 
+    const TYPE_QUALIFICATION = 'qlf';
+    const TYPE_QUARTER_FINAL = 'qfn';
+    const TYPE_SEMI_FINAL    = 'sfn';
+    const TYPE_BRONZE_MATCH  = 'brz';
+    const TYPE_FINAL         = 'fnl';
+
     public function competition()
     {
         return $this->belongsTo(Competition::class, 'competition_id');
@@ -59,18 +65,20 @@ class GameMatch extends Model
 
 
                 if ($rc <= $free_gamers_table[$p1i]["match_count"]){
-                    # if we're running out from gamers who hasn't ended compo
+                    // if we're running out from gamers who hasn't ended the compo
                     return null;
                 }
 
+                // available opponents for p1
                 $available_opponents = $free_gamers_table[$p1i]["available_opponents"]; 
-                $p2i = $p1i + 1;
                 if (count($available_opponents) == 0){
-                    // if all oppnent is finished the game, then choose the next free gamer, even if he has more than max matches
+                    // if all opponent have finished the game, then choose the next free gamer, even if he has more than max matches
                     break;
                 }
-
+                
+                $p2i = $p1i + 1;
                 while($p2i < count($free_gamers_table)){
+                    // for p2, find the first available oppenent for p1
                     if (in_array($free_gamers_table[$p2i]["gamer"], $available_opponents)){
                         break;
                     }
@@ -78,8 +86,11 @@ class GameMatch extends Model
                 }
 
                 if ($p2i < count($free_gamers_table)){
+                    // we've found a suitable p2 for p1
                     break;
                 }
+
+                // suitable p2 hasn't been found, p1 will be the next on free gamers list
                 $p1i++;
             }
 

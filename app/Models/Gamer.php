@@ -18,10 +18,12 @@ class Gamer extends Model
         return $hasActiveMatch;
     }
 
-    public function finished_participations($competition)
+    public function finished_qlf_matches($competition)
     {
         return GameMatchParticipation::whereHas('game_match', function ($query) use ($competition) {
-            $query->where('competition_id', $competition->id)->where('status', 'finished');;
+            $query->where('competition_id', $competition->id)
+                  ->where('status', 'finished')
+                  ->where('type', 'qlf');
         })->where('gamer_id', $this->id)->get();
     }
 }

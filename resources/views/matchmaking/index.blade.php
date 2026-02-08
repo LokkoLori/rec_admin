@@ -12,7 +12,7 @@
 
         if (!function_exists('mm_gamer_name')) {
             function mm_gamer_name($gamer, $act_compo){
-                return $gamer->nickname."(".$gamer->finished_participations($act_compo)->count().")";
+                return $gamer->nickname."(".$gamer->finished_qlf_matches($act_compo)->count().")";
             }
         }
 
