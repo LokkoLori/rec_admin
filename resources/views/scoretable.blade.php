@@ -9,9 +9,10 @@
     </thead>
         <tr>
             <th></th>
-            <th></th>
-            <th>main</th>
-            <th>sub</th>
+            <th>nick(match.num)</th>
+            <th>champ</th>
+            <th>qa.main</th>
+            <th>qa.sub</th>
         </tr>
     <tbody>
     @php
@@ -21,6 +22,7 @@
     <tr>
         <td>{{ ($gamer_data["qualified"] != 0) ? $rank.'.' : 'out' }}</td>
         <td>{{ $gamer_data["gamer"]->nickname }}({{ count($gamer_data["matches"]) }})</td>
+        <td>{{ $gamer_data["points"]}}</td>
         <td>{{ $gamer_data["primary_score"]}}</td>
         <td>{{ $gamer_data["secondary_score"]}}</td>
     </tr>

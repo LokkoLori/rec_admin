@@ -51,7 +51,7 @@ class ScoreTableController extends Controller
                 if (in_array($entry->status, ["disqualified", "revoked"])){
                     $gamer_data["qualified"] = 0;
                 }
-
+                $gamer_data["points"] = $entry->points;
                 $compo_data["gamer_data"][] = $gamer_data;
             }
 
@@ -76,6 +76,10 @@ class ScoreTableController extends Controller
 
                 if ($a["qualified"] != $b["qualified"]){
                     return $a["qualified"] < $b["qualified"] ? 1 : -1;
+                }
+
+                if ($a["points"] != $b["points"]){
+                    return $a["points"] < $b["points"] ? 1 : -1;
                 }
 
                 if ($a["primary_score"] != $b["primary_score"]){
