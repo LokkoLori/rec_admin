@@ -9,6 +9,13 @@ class Gamer extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['nickname', 'u14', 'women'];
+
+    protected $casts = [
+        'u14' => 'boolean',
+        'women' => 'boolean',
+    ];
+
     public function is_busy()
     {
         $hasActiveMatch = GameMatchParticipation::where('gamer_id', $this->id)->whereHas('game_match', function ($query) {
