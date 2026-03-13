@@ -14,7 +14,7 @@ const gamerinfo_frame = document.getElementById('gamerinfo_frame');
 function refres_frames(){
 
 
-    fetch("/rec_admin/public/scoretable")
+    fetch("/rec_admin/public/scoretable?hide_combined=1")
         .then(response => response.text())
         .then(html => {
             scoretable_frame.innerHTML = html;

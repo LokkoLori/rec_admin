@@ -3,94 +3,24 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
 use App\Models\CompetitionDay;
+use App\Services\CompetitionScoringService;
 
 class ScoreTableController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request, CompetitionScoringService $scoringService)
     {
         if (is_null($request->input("competion_day_id"))){
             $actual_day = CompetitionDay::actual_day();
         } else {
             $actual_day = CompetitionDay::find($request->input("competion_day_id"));
         }
-        $compo_score_tables = []; 
-        $compos = $actual_day->competitions;
         
-        foreach ($compos as $compo){
-            
-            $compo_data = [];
-            $compo_data["compo"] = $compo;
-            $compo_data["gamer_data"] = [];
-            $entries = $compo->entries->whereIn('status', ['accepted', 'disqualified', 'revoked', 'finished']);
-            
-            $gamer_points = [];
+        // Calling the service
+        $compo_score_tables = $scoringService->getSortedScoreTables($actual_day);
 
-            foreach($entries as $entry){
-                $gamer_data = [];
+        $hide_combined = $request->boolean('hide_combined');
 
-                $gamer = $entry->gamer;
-                $gamer_data["gamer"] = $gamer;
-
-                $participations = $gamer->finished_qlf_matches($compo);
-                $gamer_data["matches"] = [];
-                $sum_score = 0;
-                foreach($participations as $participation){
-                    $match_data = [];
-                    $match_data["score"] = $participation->score;
-                    $match_data["opponent"] = $participation->opponent()->nickname;
-                    $sum_score +=  $match_data["score"];
-                    $gamer_data["matches"][] = $match_data;
-                }
-
-                $gamer_data["primary_score"] = $sum_score;
-                $gamer_points[$gamer->nickname] = $sum_score;
-
-                $gamer_data["qualified"] = 1;
-                if (in_array($entry->status, ["disqualified", "revoked"])){
-                    $gamer_data["qualified"] = 0;
-                }
-                $gamer_data["points"] = $entry->points;
-                $compo_data["gamer_data"][] = $gamer_data;
-            }
-
-            foreach($compo_data["gamer_data"] as &$updating_gamer_data){
-                
-                $sum_sec_score = 0;
-                foreach($updating_gamer_data["matches"] as $match){
-                    $sum_sec_score += $match["score"] * $gamer_points[$match["opponent"]];
-                }
-
-                $updating_gamer_data["secondary_score"] = $sum_sec_score;
-            }
-
-            $compo_score_tables[] = $compo_data;
-        }
-
-        foreach($compo_score_tables as &$table){
-            
-            // sorting score tables by logic!
-
-            usort($table["gamer_data"], function ($a, $b) {
-
-                if ($a["qualified"] != $b["qualified"]){
-                    return $a["qualified"] < $b["qualified"] ? 1 : -1;
-                }
-
-                if ($a["points"] != $b["points"]){
-                    return $a["points"] < $b["points"] ? 1 : -1;
-                }
-
-                if ($a["primary_score"] != $b["primary_score"]){
-                    return $a["primary_score"] < $b["primary_score"] ? 1 : -1;
-                }
-
-                return $a["secondary_score"] < $b["secondary_score"] ? 1 : -1;
-            });
-
-        }
-
-        return view('scoretable', compact('actual_day', 'compo_score_tables'));
+        return view('scoretable', compact('actual_day', 'compo_score_tables', 'hide_combined'));
     }
 }
