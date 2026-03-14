@@ -1,7 +1,7 @@
 <style>
 .pairbutton {
     width: 200px;
-    height: 100px;
+    height: 120px;
     font-size: 18pt;
     user-select: none;
     -webkit-user-select: none;
