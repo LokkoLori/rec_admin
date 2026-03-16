@@ -1,7 +1,8 @@
 <x-app>
 @foreach ($finished_matches as $match)
     {{ $match->id }} : 
-    {{ $match->competition->game->name }} : 
+    {{ $match->competition->game->name }} :
+    {{ $match->type }} :
     {{ $match->game_station->name}} :
 
     @php

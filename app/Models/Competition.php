@@ -85,4 +85,35 @@ class Competition extends Model
 
         return $ret;
     }
+
+    /**
+     * Get the mapped finals bracket and the currently active match index.
+     *
+     * @return array
+     */
+    public function getFinalsBracket(): array
+    {
+        $allMatches = \App\Models\GameMatch::with(['participations.gamer'])
+            ->where('competition_id', $this->id)
+            ->whereIn('type', ['qfn', 'sfn', 'brz', 'fnl'])
+            ->orderBy('id', 'asc')
+            ->get();
+
+        $matches = [];
+        $activeMatchIndex = null;
+
+        // Map matches by their logical index (0-7)
+        foreach ($allMatches as $index => $match) {
+            $matches[$index] = $match;
+
+            if ($match->status === 'started') {
+                $activeMatchIndex = $index;
+            }
+        }
+
+        return [
+            'matches' => $matches,
+            'activeMatchIndex' => $activeMatchIndex,
+        ];
+    }
 }

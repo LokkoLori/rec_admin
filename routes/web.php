@@ -10,6 +10,8 @@ use App\Http\Controllers\GamerInfoController;
 use App\Http\Controllers\MatchesController;
 use App\Http\Controllers\MatchClientController;
 use App\Http\Controllers\ChampionshipController;
+use App\Http\Controllers\FinalsController;
+use App\Http\Controllers\ObsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -40,7 +42,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/entries', [EntryController::class, 'create'])->name('entries.create');
 });
 
-Route::group(['middleware' => ['role:admin']], function () {
+Route::group(['middleware' => ['web', 'role:admin']], function () {
     Route::get('/admin/roles', [AdminController::class, 'rolesIndex'])->name('admin.roles');
     Route::post('/admin/roles', [AdminController::class, 'createRole'])->name('admin.roles.create');
     Route::get('/admin/users', [AdminController::class, 'users'])->name('admin.users');
@@ -56,10 +58,18 @@ Route::group(['middleware' => ['role:admin']], function () {
     Route::post('/matches/update', [MatchesController::class, 'update'])->name('matches.update');
     Route::get('/matchclient', [MatchClientController::class, 'index'])->name('matchclient.index');
     Route::post('/matchclient/action', [MatchClientController::class, 'action'])->name('matchclient.action');
+    Route::get('/finals', [FinalsController::class, 'index'])->name('finals.index');
+    Route::post('/finals/setup', [FinalsController::class, 'setup'])->name('finals.setup');
+    Route::post('/finals/competition/{competition}/start', [FinalsController::class, 'startCompetition'])->name('finals.start_competition');
+    Route::get('/finals/competition/{competition}/matches', [FinalsController::class, 'manageMatches'])->name('finals.manage_matches');
+    Route::post('/finals/participation/{participation}/score', [FinalsController::class, 'updateScore'])->name('finals.update_score');
+    Route::post('/finals/match/{gameMatch}/finish', [FinalsController::class, 'finishMatch'])->name('finals.finish_match');
 });
 
 Route::get('/scoretable', [ScoreTableController::class, 'index'])->name('scoretable.index');
 Route::get('/gamerinfo', [GamerInfoController::class, 'index'])->name('gamerinfo.index');
 Route::get('/championship', [ChampionshipController::class, 'index'])->name('championship.index');
+Route::get('/obs/bracket', [ObsController::class, 'bracketView'])->name('obs.bracket');
+Route::get('/obs/game', [ObsController::class, 'gameView'])->name('obs.game');
 
 require __DIR__.'/auth.php';
