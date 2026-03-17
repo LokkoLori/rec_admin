@@ -3,9 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Competition;
-use App\Models\GameMatch;
 
 class ObsController extends Controller
 {

@@ -54,7 +54,12 @@
                                         <button type="submit" style="padding: 5px 10px; cursor: pointer; background-color: darkorange; color: white; border: none; border-radius: 3px;">Start</button>
                                     </form>
                                 @elseif($compo->final_status === 'active')
-                                    <a href="#" style="display: inline-block; padding: 5px 10px; background: #007bff; color: white; text-decoration: none; border-radius: 3px;">Manage Matches</a>
+                                    <a href="{{ route('finals.manage_matches', $compo->id) }}" style="display: inline-block; padding: 5px 10px; background: #007bff; color: white; text-decoration: none; border-radius: 3px;">Manage Matches</a>
+                                    
+                                    <form action="{{ route('finals.close_competition', $compo->id) }}" method="POST" style="display: inline-block; margin-left: 10px;" onsubmit="return confirm('Are you sure you want to close this competition? OBS screens will be cleared.');">
+                                        @csrf
+                                        <button type="submit" style="padding: 5px 10px; cursor: pointer; background-color: #dc3545; color: white; border: none; border-radius: 3px;">Close</button>
+                                    </form>
                                 @endif
                             </td>
                         </tr>

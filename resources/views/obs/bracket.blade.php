@@ -106,14 +106,14 @@
                 if (!$match || !isset($match->participations[$playerIndex])) {
                     // Empty state formatting
                     $content = $isRightSide 
-                        ? "<span class='score'></span><span class='name'>TBD</span>" 
-                        : "<span class='name'>TBD</span><span class='score'></span>";
+                        ? "<span class='score'></span><span class='name'></span>" 
+                        : "<span class='name'></span><span class='score'></span>";
                     
                     return "<div id='{$boxId}' class='{$class}'>{$content}</div>";
                 }
                 
                 $part = $match->participations[$playerIndex];
-                $name = $part->gamer ? $part->gamer->nickname : 'TBD';
+                $name = $part->gamer ? $part->gamer->nickname : '';
                 $score = $part->score;
                 
                 // Swap score and name order for right side
@@ -156,13 +156,13 @@
 
         <!-- PODIUM -->
         <div id="podium-1st" class="player-box">
-            {{ $podium['first'] ? $podium['first']->nickname : 'TBD' }}
+            {{ $podium['first'] ? $podium['first']->nickname : '' }}
         </div>
         <div id="podium-2nd" class="player-box">
-            {{ $podium['second'] ? $podium['second']->nickname : 'TBD' }}
+            {{ $podium['second'] ? $podium['second']->nickname : '' }}
         </div>
         <div id="podium-3rd" class="player-box">
-            {{ $podium['third'] ? $podium['third']->nickname : 'TBD' }}
+            {{ $podium['third'] ? $podium['third']->nickname : '' }}
         </div>
 
     </div>

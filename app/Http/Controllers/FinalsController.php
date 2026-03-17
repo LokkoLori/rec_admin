@@ -71,7 +71,7 @@ class FinalsController extends Controller
             $activeMatch = GameMatch::with(['participations.gamer'])
                 ->where('competition_id', $competition->id)
                 ->whereIn('type', ['qfn', 'sfn', 'brz', 'fnl'])
-                ->where('status', 'pending')
+                ->where('status', 'waiting')
                 ->orderBy('id', 'asc')
                 ->first();
 
@@ -315,5 +315,32 @@ class FinalsController extends Controller
 
         // Temporary return to test this specific phase
         return redirect()->route('finals.index')->with('success', 'Finals setup is OK!');
+    }
+
+    public function updateScore(Request $request, GameMatchParticipation $participation)
+    {
+        $action = $request->input('action');
+
+        if ($action === 'increase') {
+            $participation->score++;
+        } elseif ($action === 'decrease') {
+            // Prevent negative scores
+            if ($participation->score > 0) {
+                $participation->score--;
+            }
+        }
+
+        $participation->save();
+
+        // Redirect back so the admin stays on the current page
+        return redirect()->back();
+    }
+
+    public function closeCompetition(Request $request, Competition $competition)
+    {
+        $competition->final_status = 'finished';
+        $competition->save();
+
+        return redirect()->route('finals.index')->with('success', 'Competition closed successfully. OBS screens are now cleared.');
     }
 }

@@ -61,9 +61,12 @@ Route::group(['middleware' => ['web', 'role:admin']], function () {
     Route::get('/finals', [FinalsController::class, 'index'])->name('finals.index');
     Route::post('/finals/setup', [FinalsController::class, 'setup'])->name('finals.setup');
     Route::post('/finals/competition/{competition}/start', [FinalsController::class, 'startCompetition'])->name('finals.start_competition');
+    Route::post('/finals/competition/{competition}/close', [FinalsController::class, 'closeCompetition'])->name('finals.close_competition');
     Route::get('/finals/competition/{competition}/matches', [FinalsController::class, 'manageMatches'])->name('finals.manage_matches');
     Route::post('/finals/participation/{participation}/score', [FinalsController::class, 'updateScore'])->name('finals.update_score');
+    Route::get('/finals/competition/{competition}/matches', [FinalsController::class, 'manageMatches'])->name('finals.manage_matches');
     Route::post('/finals/match/{gameMatch}/finish', [FinalsController::class, 'finishMatch'])->name('finals.finish_match');
+    Route::post('/finals/participation/{participation}/score', [FinalsController::class, 'updateScore'])->name('finals.update_score');
 });
 
 Route::get('/scoretable', [ScoreTableController::class, 'index'])->name('scoretable.index');
