@@ -394,7 +394,7 @@
 
     @if($matches->hasPages())
         <div class="pagination-container">
-            {{ $matches->links() }}
+            {{ $matches->withQueryString()->links() }}
         </div>
     @endif
 
