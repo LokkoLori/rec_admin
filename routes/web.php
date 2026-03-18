@@ -12,6 +12,7 @@ use App\Http\Controllers\MatchClientController;
 use App\Http\Controllers\ChampionshipController;
 use App\Http\Controllers\FinalsController;
 use App\Http\Controllers\ObsController;
+use App\Http\Controllers\MatchHistoryController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -74,5 +75,6 @@ Route::get('/gamerinfo', [GamerInfoController::class, 'index'])->name('gamerinfo
 Route::get('/championship', [ChampionshipController::class, 'index'])->name('championship.index');
 Route::get('/obs/bracket', [ObsController::class, 'bracketView'])->name('obs.bracket');
 Route::get('/obs/game', [ObsController::class, 'gameView'])->name('obs.game');
+Route::get('/history/matches', [MatchHistoryController::class, 'index'])->name('matches.history');
 
 require __DIR__.'/auth.php';
