@@ -22,7 +22,7 @@ class MatchHistoryController extends Controller
         ])
         ->whereHas('competition.competitionDay', function ($q) {
             // Adjust 'status' to your actual column name if it differs
-            $q->whereIn('status', ['active', 'finished']);
+            $q->whereIn('status', ['started', 'finished']);
         })
         ->orderBy('id', 'desc');
 
