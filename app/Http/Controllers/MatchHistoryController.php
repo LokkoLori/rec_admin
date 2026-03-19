@@ -15,16 +15,20 @@ class MatchHistoryController extends Controller
     {
         // 1. Start building the query with eager loading
         // ALWAYS filter out test data: only include matches from active or finished Competition Days
-        $query = GameMatch::with([
-            'competition.game',
-            'competition.competitionDay.season',
-            'participations.gamer'
-        ])
-        ->whereHas('competition.competitionDay', function ($q) {
-            // Adjust 'status' to your actual column name if it differs
-            $q->whereIn('status', ['started', 'finished']);
-        })
-        ->orderBy('id', 'desc');
+        $query = GameMatch::select('game_matches.*')
+            ->join('competitions', 'game_matches.competition_id', '=', 'competitions.id')
+            ->join('competition_days', 'competitions.competition_day_id', '=', 'competition_days.id')
+            ->join('seasons', 'competition_days.season_id', '=', 'seasons.id')
+            ->with([
+                'competition.game',
+                'competition.competitionDay.season',
+                'participations.gamer'
+            ])
+            ->whereIn('competition_days.status', ['started', 'finished'])
+            ->whereIn('seasons.status', ['started', 'finished'])
+            // Rendezés: Először a nap dátuma csökkenő, MAJD a meccs ID csökkenő
+            ->orderBy('competition_days.date', 'desc')
+            ->orderBy('game_matches.id', 'desc');
 
         // 2. Apply filters dynamically based on request parameters
         
@@ -60,8 +64,13 @@ class MatchHistoryController extends Controller
         $matches = $query->paginate(50);
 
         // 4. Fetch data for the filter dropdowns
-        $seasons = Season::orderBy('id', 'desc')->get();
-        $days = CompetitionDay::orderBy('date', 'desc')->get();
+        $seasons = Season::whereIn('status', ['started', 'finished'])
+            ->orderBy('year', 'desc')
+            ->get();
+        
+        $days = CompetitionDay::whereIn('status', ['started', 'finished'])
+            ->orderBy('date', 'desc')
+            ->get();
         $games = Game::orderBy('name', 'asc')->get();
         $gamers = Gamer::orderBy('nickname', 'asc')->get();
 

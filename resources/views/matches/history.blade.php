@@ -382,6 +382,16 @@
                     <div class="detail-item" style="color: #999; font-size: 12px;">
                         <strong>Match ID:</strong> #{{ $match->id }}
                     </div>
+                    @if($match->note)
+                        <div class="match-note" style="border-top: 1px dashed #ccc; padding: 10px 20px; background: #fafafa; font-size: 14px; color: #333;">
+                            <strong>Note:</strong> 
+                            {!! preg_replace(
+                                '/(https?:\/\/[^\s]+)/', 
+                                '<a href="$1" target="_blank" rel="noopener noreferrer" style="color: #007bff; text-decoration: none; font-weight: bold;">$1</a>', 
+                                e($match->note)
+                            ) !!}
+                        </div>
+                    @endif
                 </div>
             </div>
             

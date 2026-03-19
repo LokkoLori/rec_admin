@@ -15,6 +15,8 @@ class GameMatch extends Model
     const TYPE_BRONZE_MATCH  = 'brz';
     const TYPE_FINAL         = 'fnl';
 
+    protected $fillable = ['competition_id', 'type', 'status', 'note'];
+
     public function competition()
     {
         return $this->belongsTo(Competition::class, 'competition_id');
