@@ -9,6 +9,8 @@ class GameMatchParticipation extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['game_match_id', 'score', 'gamer_id'];
+
     public function gamer()
     {
         return $this->belongsTo('App\Models\Gamer', 'gamer_id');

@@ -15,7 +15,7 @@ class GameMatch extends Model
     const TYPE_BRONZE_MATCH  = 'brz';
     const TYPE_FINAL         = 'fnl';
 
-    protected $fillable = ['competition_id', 'type', 'status', 'note'];
+    protected $fillable = ['competition_id', 'type', 'status', 'note', 'game_station_id'];
 
     public function competition()
     {
