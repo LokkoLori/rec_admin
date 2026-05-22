@@ -75,6 +75,7 @@ class GameMatch extends Model
                 $available_opponents = $free_gamers_table[$p1i]["available_opponents"]; 
                 if (count($available_opponents) == 0){
                     // if all opponent have finished the game, then choose the next free gamer, even if he has more than max matches
+                    $p2i = $p1i + 1;
                     break;
                 }
                 

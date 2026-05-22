@@ -9,7 +9,7 @@ class Game extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'json_data'];
 
     public function actual_competition(){
         // in theory only one active competition for a game should be
@@ -19,4 +19,8 @@ class Game extends Model
     public function game_stations(){
         return $this->hasMany(GameStation::class);
     }
+
+    protected $casts = [
+        'json_data' => 'array',
+    ];
 }

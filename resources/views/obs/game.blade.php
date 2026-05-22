@@ -94,10 +94,7 @@
 @if($competition && $activeMatch)
     @php
         // Determine background image based on game name
-        $bgImage = 'rec_tetris_2026_editable.png'; 
-        if (str_starts_with($competition->game->name, 'Wizard')) {
-            $bgImage = 'rec_wow_2026_editable.png'; // Update this to your actual WoW game background filename
-        }
+        $bgImage = $competition->game->json_data['gamescreen_img'];
 
         // Format match type string
         $matchTypeStr = '';

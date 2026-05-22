@@ -91,10 +91,7 @@
 @if($competition)
     @php
         // Determine background image based on game name
-        $bgImage = 'rec_tetris_tabella_top8_2026.png'; // default fallback
-        if (str_starts_with($competition->game->name, 'Wizard')) {
-            $bgImage = 'rec_wow_tabella_top8_2026.png';
-        }
+        $bgImage = $competition->game->json_data['tabella_img'];
     @endphp
 
     <div class="obs-container" style="background-image: url('{{ asset('images/' . $bgImage) }}');">
