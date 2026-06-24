@@ -83,6 +83,26 @@ class GameMatch extends Model
                 while($p2i < count($free_gamers_table)){
                     // for p2, find the first available oppenent for p1
                     if (in_array($free_gamers_table[$p2i]["gamer"], $available_opponents)){
+                        
+                        // Check ahead for gamers with the same match_count but closer points
+                        $best_p2i = $p2i;
+                        $base_match_count = $free_gamers_table[$p2i]["match_count"];
+                        $p1_points = $free_gamers_table[$p1i]["points"];
+                        $best_diff = abs($p1_points - $free_gamers_table[$p2i]["points"]);
+
+                        $scan_i = $p2i + 1;
+                        while ($scan_i < count($free_gamers_table) && $free_gamers_table[$scan_i]["match_count"] == $base_match_count) {
+                            if (in_array($free_gamers_table[$scan_i]["gamer"], $available_opponents)) {
+                                $current_diff = abs($p1_points - $free_gamers_table[$scan_i]["points"]);
+                                if ($current_diff < $best_diff) {
+                                    $best_diff = $current_diff;
+                                    $best_p2i = $scan_i;
+                                }
+                            }
+                            $scan_i++;
+                        }
+
+                        $p2i = $best_p2i;
                         break;
                     }
                     $p2i++;

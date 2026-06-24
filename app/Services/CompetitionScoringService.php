@@ -54,6 +54,8 @@ class CompetitionScoringService
                 $compo_data["gamer_data"][] = $gamer_data;
             }
 
+            $gamer_sec_scores = [];
+
             foreach($compo_data["gamer_data"] as &$updating_gamer_data){
                 
                 $sum_sec_score = 0;
@@ -62,6 +64,17 @@ class CompetitionScoringService
                 }
 
                 $updating_gamer_data["secondary_score"] = $sum_sec_score;
+                $gamer_sec_scores[$updating_gamer_data["gamer"]->nickname] = $sum_sec_score;
+            }
+
+            // Calculate tertiary scores using the secondary scores of opponents
+            foreach($compo_data["gamer_data"] as &$updating_gamer_data){
+                $sum_ter_score = 0;
+                foreach($updating_gamer_data["matches"] as $match){
+                    $sum_ter_score += $match["score"] * $gamer_sec_scores[$match["opponent"]];
+                }
+
+                $updating_gamer_data["tertiary_score"] = $sum_ter_score;
             }
 
             $compo_score_tables[] = $compo_data;
@@ -82,6 +95,7 @@ class CompetitionScoringService
                         "points"          => 0,
                         "primary_score"   => 0,
                         "secondary_score" => 0,
+                        "tertiary_score"  => 0,
                         "matches"         => [] // Likely not needed in the summary view, but keeps the structure intact
                     ];
                 }
@@ -90,6 +104,7 @@ class CompetitionScoringService
                 $aggregated_gamers[$gamer_id]["points"] += $gamer_data["points"];
                 $aggregated_gamers[$gamer_id]["primary_score"] += $gamer_data["primary_score"];
                 $aggregated_gamers[$gamer_id]["secondary_score"] += $gamer_data["secondary_score"];
+                $aggregated_gamers[$gamer_id]["tertiary_score"] += $gamer_data["tertiary_score"];
                 array_push($aggregated_gamers[$gamer_id]["matches"], ...$gamer_data["matches"]);
             }
         }
@@ -130,7 +145,11 @@ class CompetitionScoringService
                     return $a["primary_score"] < $b["primary_score"] ? 1 : -1;
                 }
 
-                return $a["secondary_score"] < $b["secondary_score"] ? 1 : -1;
+                if ($a["secondary_score"] != $b["secondary_score"]){
+                    return $a["secondary_score"] < $b["secondary_score"] ? 1 : -1;
+                }
+
+                return $a["tertiary_score"] < $b["tertiary_score"] ? 1 : -1;
             });
 
         }

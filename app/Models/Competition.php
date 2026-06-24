@@ -58,7 +58,8 @@ class Competition extends Model
             $row["gamer"] = $gamer;
             $participations = $gamer->finished_qlf_matches($this);
             $row["match_count"] = $participations->count();
-
+            $row["points"] = $participations->sum('score');
+            
             $exluded_opponents = [$gamer]; // it's a life hack!
 
             foreach ($participations as $p){

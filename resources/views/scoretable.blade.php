@@ -26,7 +26,7 @@
         <td>{{ $gamer_data["gamer"]->nickname }} {!! ($gamer_data["gamer"]->u14 == 1) ? "<font size=0.5><b>u</b></font>" : ""!!} {!! ($gamer_data["gamer"]->women == 1) ? "<font size=0.5><b>w</b></font>" : ""!!}</td>
         <td>{{ $gamer_data["points"]}}</td>
         <td>{{ $gamer_data["primary_score"]}}</td>
-        <td>{{ $gamer_data["secondary_score"]}}</td>
+        <td>{{ $gamer_data["secondary_score"]}},{{ $gamer_data["tertiary_score"]}}</td>
         <td align="right">{{ count($gamer_data["matches"]) }}</td>
     </tr>
     @php
