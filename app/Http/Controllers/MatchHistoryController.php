@@ -24,9 +24,9 @@ class MatchHistoryController extends Controller
                 'competition.competitionDay.season',
                 'participations.gamer'
             ])
+            ->whereIn('game_matches.status', ['started', 'finished'])
             ->whereIn('competition_days.status', ['started', 'finished'])
             ->whereIn('seasons.status', ['started', 'finished'])
-            // Rendezés: Először a nap dátuma csökkenő, MAJD a meccs ID csökkenő
             ->orderBy('competition_days.date', 'desc')
             ->orderBy('game_matches.id', 'desc');
 
