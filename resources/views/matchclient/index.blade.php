@@ -56,10 +56,10 @@ var target = null;
 
 <script>
 
-const clinetform = document.getElementById('clientform');
+const clientform = document.getElementById('clientform');
 
 function action(){
-    clinetform.submit();
+    clientform.submit();
 }
 
 @if (is_null($act_match) && $game_station->available == 1)

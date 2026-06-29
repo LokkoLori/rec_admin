@@ -31,6 +31,26 @@ class Competition extends Model
         return $this->hasMany(GameMatch::class);
     }
 
+    public function get_gamer_match_data()
+    {
+        $map = [];
+        $entries = $this->entries->where('status', 'accepted');
+        
+        foreach ($entries as $entry) {
+            $gamer = $entry->gamer;
+            $participations = $gamer->finished_qlf_matches($this);
+            
+            $map[$gamer->id] = [
+                'gamer' => $gamer,
+                'participations' => $participations,
+                'match_count' => $participations->count(),
+                'points' => $participations->sum('score'),
+            ];
+        }
+        
+        return $map;
+    }
+
     public function free_gamers_table()
     {
 
@@ -40,14 +60,27 @@ class Competition extends Model
         $free_gamers = [];  // free gamers in this compo
         $available_opponents = [];
 
-        $entries = $this->entries->where('status', 'accepted');
+        // Build the map once, effectively killing the N+1 issue for this logic
+        $gamer_data_map = $this->get_gamer_match_data();
 
-        foreach ($entries as $entry){
-            $gamer =  $entry->gamer;
-            if ($gamer->finished_qlf_matches($this)->count() < $this->round_count){
+        // Find the absolute minimum match count across ALL gamers (including busy ones)
+        $min_match_count = 999999;
+        foreach ($gamer_data_map as $data) {
+            if ($data['match_count'] < $min_match_count) {
+                $min_match_count = $data['match_count'];
+            }
+        }
+
+        foreach ($gamer_data_map as $data) {
+            $gamer =  $data['gamer'];
+            $mc = $data['match_count'];
+            
+            if ($mc < $this->round_count){
                 $available_opponents[] = $gamer;
             }
-            if (!$gamer->is_busy()){
+            
+            // Filter: only add if not busy AND match count is at most min_match_count + 2
+            if (!$gamer->is_busy(30) && $mc <= $min_match_count + 2){
                 $free_gamers[] = $gamer;
             }
         }
@@ -55,18 +88,21 @@ class Competition extends Model
         foreach ($free_gamers as $gamer){
             $row = [];
 
+            // Pull pre-calculated data from our map
+            $data = $gamer_data_map[$gamer->id];
+
             $row["gamer"] = $gamer;
-            $participations = $gamer->finished_qlf_matches($this);
-            $row["match_count"] = $participations->count();
-            $row["points"] = $participations->sum('score');
+            $participations = $data['participations'];
+            $row["match_count"] = $data['match_count'];
+            $row["points"] = $data['points'];
             
-            $exluded_opponents = [$gamer]; // it's a life hack!
+            $excluded_opponents = [$gamer]; // it's a life hack!
 
             foreach ($participations as $p){
-                $exluded_opponents[] = $p->opponent();
+                $excluded_opponents[] = $p->opponent();
             }
 
-            $row["available_opponents"] = array_diff($available_opponents, $exluded_opponents);
+            $row["available_opponents"] = array_diff($available_opponents, $excluded_opponents);
             $row["random"] = random_int(0, 10000);
         
             $ret[] = $row;

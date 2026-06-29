@@ -16,13 +16,29 @@ class Gamer extends Model
         'women' => 'boolean',
     ];
 
-    public function is_busy()
+    public function is_busy(int $cooldown_seconds = 0)
     {
         $hasActiveMatch = GameMatchParticipation::where('gamer_id', $this->id)->whereHas('game_match', function ($query) {
             $query->whereIn('status', ['waiting', 'started']);
         })->exists();
 
-        return $hasActiveMatch;
+        if ($hasActiveMatch) {
+            return true;
+        }
+
+        // If no active match but cooldown is required, check recent participations
+        // based on the parent game_match's updated_at, which is guaranteed to change.
+        if ($cooldown_seconds > 0) {
+            $isInCooldown = GameMatchParticipation::where('gamer_id', $this->id)
+                ->whereHas('game_match', function ($query) use ($cooldown_seconds) {
+                    $query->where('updated_at', '>', now()->subSeconds($cooldown_seconds));
+                })
+                ->exists();
+
+            return $isInCooldown;
+        }
+
+        return false;
     }
 
     public function finished_qlf_matches($competition)
