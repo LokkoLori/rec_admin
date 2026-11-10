@@ -1,0 +1,24 @@
+<div id="championship_div"></div></td>
+
+<script>
+
+const championship_frame = document.getElementById('championship_div');
+
+
+function refres_frames(){
+
+
+    fetch("/rec_admin/public/championship")
+        .then(response => response.text())
+        .then(html => {
+            championship_frame.innerHTML = html;
+        })
+        .catch(error => console.error('Error loading the content:', error));
+
+    setTimeout(refres_frames, 5000);
+}
+
+
+refres_frames();
+
+</script>

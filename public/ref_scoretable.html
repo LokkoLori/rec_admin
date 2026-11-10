@@ -1,0 +1,24 @@
+<div id="scoretable_div"></div></td>
+
+<script>
+
+const scoretable_frame = document.getElementById('scoretable_div');
+
+
+function refres_frames(){
+
+
+    fetch("/rec_admin/public/scoretable")
+        .then(response => response.text())
+        .then(html => {
+            scoretable_frame.innerHTML = html;
+        })
+        .catch(error => console.error('Error loading the content:', error));
+
+    setTimeout(refres_frames, 5000);
+}
+
+
+refres_frames();
+
+</script>
